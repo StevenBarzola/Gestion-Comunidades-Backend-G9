@@ -56,4 +56,33 @@ class ItemInventario(models.Model):
 # ==========================================
 # 3. PARTE DE ISAAC: Asambleas y Votaciones
 # ==========================================
+class Asamblea(models.Model):
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, related_name='asambleas')
+    titulo = models.CharField(max_length=200)
+    activa = models.BooleanField(default=True)
+    fecha_cierre = models.DateTimeField()
 
+    def __str__(self):
+        estado = "Activa" if self.activa else "Cerrada"
+        return f"{self.titulo} - {self.club.siglas} ({estado})"
+
+class OpcionVoto(models.Model):
+    asamblea = models.ForeignKey(Asamblea, on_delete=models.CASCADE, related_name='opciones')
+    nombre_lista = models.CharField(max_length=100)
+    descripcion = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.nombre_lista} - {self.asamblea.titulo}"
+
+class Voto(models.Model):
+    asamblea = models.ForeignKey(Asamblea, on_delete=models.CASCADE, related_name='votos')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    opcion = models.ForeignKey(OpcionVoto, on_delete=models.CASCADE)
+    fecha_emision = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Restricción obligatoria: un usuario = un voto válido por asamblea
+        unique_together = ('asamblea', 'usuario')
+
+    def __str__(self):
+        return f"Voto de {self.usuario.username} en {self.asamblea.titulo}"
