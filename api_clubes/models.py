@@ -38,6 +38,19 @@ class Membresia(models.Model):
 # ==========================================
 # 2. PARTE DE JULIO: Inventario
 # ==========================================
+class ItemInventario(models.Model):
+    ESTADOS = (
+        ('Disponible', 'Disponible'),
+        ('Prestado', 'Prestado'),
+    )
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, related_name='inventario')
+    codigo = models.CharField(max_length=50, unique=True)
+    nombre = models.CharField(max_length=200)
+    categoria = models.CharField(max_length=100)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='Disponible')
+
+    def __str__(self):
+        return f"{self.codigo} - {self.nombre} ({self.estado})"
 
 
 # ==========================================
