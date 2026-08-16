@@ -27,6 +27,23 @@ class ItemInventarioViewSet(viewsets.ModelViewSet):
     queryset = ItemInventario.objects.all()
     serializer_class = ItemInventarioSerializer
 
+    def get_queryset(self):
+        queryset = ItemInventario.objects.all()
+        
+        # Capturar parámetros de consulta desde la URL
+        estado = self.request.query_params.get('estado', None)
+        club_id = self.request.query_params.get('club', None)
+
+        # Aplicar filtro por estado (Disponible / Prestado)
+        if estado:
+            queryset = queryset.filter(estado__iexact=estado)
+
+        # Aplicar filtro por ID de club
+        if club_id:
+            queryset = queryset.filter(club_id=club_id)
+
+        return queryset
+
 # ==========================================
 # PARTE DE ISAAC: Asambleas y Votaciones
 # ==========================================
