@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Aplicación principal
     'api_clubes',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
