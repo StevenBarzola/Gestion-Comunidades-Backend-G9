@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Club, Membresia, ItemInventario, Asamblea, OpcionVoto, Voto
 
 class ClubSerializer(serializers.ModelSerializer):
@@ -10,6 +11,22 @@ class MembresiaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membresia
         fields = '__all__'
+
+class RegistroUsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password'] 
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        # Se usa set_password() para que Django aplique la encriptación PBKDF2
+        usuario = User(
+            username=validated_data['username'],
+            email=validated_data['email']
+        )
+        usuario.set_password(validated_data['password']) 
+        usuario.save()
+        return usuario
 
 
 #==============================

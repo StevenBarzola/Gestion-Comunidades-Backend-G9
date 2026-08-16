@@ -1,8 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import (viewsets, generics)
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
 from .models import Club, Membresia, ItemInventario, Asamblea, OpcionVoto, Voto
 from .serializers import (
     ClubSerializer, MembresiaSerializer, ItemInventarioSerializer,
-    AsambleaSerializer, OpcionVotoSerializer, VotoSerializer
+    AsambleaSerializer, OpcionVotoSerializer, VotoSerializer, RegistroUsuarioSerializer
 )
 
 class ClubViewSet(viewsets.ModelViewSet):
@@ -12,6 +14,11 @@ class ClubViewSet(viewsets.ModelViewSet):
 class MembresiaViewSet(viewsets.ModelViewSet):
     queryset = Membresia.objects.all()
     serializer_class = MembresiaSerializer
+
+class RegistroUsuarioView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegistroUsuarioSerializer
+    permission_classes = [AllowAny] # Permite acceso sin estar logueado
 
 #==============================
 # PARTE DE JULIO: Inventario

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ClubViewSet, MembresiaViewSet, ItemInventarioViewSet
 from .views import (
     ClubViewSet, MembresiaViewSet, ItemInventarioViewSet,
-    AsambleaViewSet, OpcionVotoViewSet, VotoViewSet
+    AsambleaViewSet, OpcionVotoViewSet, VotoViewSet, RegistroUsuarioView
 )
 
 # El router genera automáticamente las rutas para el CRUD
@@ -17,5 +17,6 @@ router.register(r'votos', VotoViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('registro/', RegistroUsuarioView.as_view()),
 ]
 
