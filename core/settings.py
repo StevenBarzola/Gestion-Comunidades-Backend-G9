@@ -146,4 +146,13 @@ MAILERS = {
 }
 
 #Para que Frontend pueda hacer peticiones
-CORS_ALLOW_ALL_ORIGINS = True     
+CORS_ALLOW_ALL_ORIGINS = True  
+
+# Django REST Framework settings
+#Para que el token generado en /api/login/ realmente autentique las peticiones siguientes.
+REST_FRAMEWORK = { 
+    'DEFAULT_AUTHENTICATION_CLASSES': [ 
+        'rest_framework.authentication.TokenAuthentication', 
+        'rest_framework.authentication.SessionAuthentication', 
+    ], 
+} 

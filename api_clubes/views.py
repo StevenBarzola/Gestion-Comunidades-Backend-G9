@@ -2,6 +2,7 @@ from rest_framework import (viewsets, generics)
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from .models import Club, Membresia, ItemInventario, Asamblea, OpcionVoto, Voto
+from rest_framework.permissions import IsAuthenticated
 from .serializers import (
     ClubSerializer, MembresiaSerializer, ItemInventarioSerializer,
     AsambleaSerializer, OpcionVotoSerializer, VotoSerializer, RegistroUsuarioSerializer
@@ -58,3 +59,5 @@ class OpcionVotoViewSet(viewsets.ModelViewSet):
 class VotoViewSet(viewsets.ModelViewSet):
     queryset = Voto.objects.all()
     serializer_class = VotoSerializer
+    permission_classes = [IsAuthenticated]
+    def perform_create(self, serializer): serializer.save(usuario=self.request.user)

@@ -54,3 +54,4 @@ class VotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Voto
         fields = '__all__'
+        read_only_fields = ['usuario']
