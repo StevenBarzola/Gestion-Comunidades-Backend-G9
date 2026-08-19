@@ -2,14 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Club, Membresia, ItemInventario, Asamblea, OpcionVoto, Voto
 
-class ClubSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Club
-        fields = '__all__'
-
 class MembresiaSerializer(serializers.ModelSerializer):
+    # Extraemos el string del username directamente del usuario relacionado
+    usuario_username = serializers.ReadOnlyField(source='usuario.username')
+
     class Meta:
         model = Membresia
+        fields = '__all__'
+
+class ClubSerializer(serializers.ModelSerializer):
+    miembros = MembresiaSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Club
         fields = '__all__'
 
 class RegistroUsuarioSerializer(serializers.ModelSerializer):
