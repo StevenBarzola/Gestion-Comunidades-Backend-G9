@@ -15,6 +15,9 @@ class ClubViewSet(viewsets.ModelViewSet):
 class MembresiaViewSet(viewsets.ModelViewSet):
     queryset = Membresia.objects.all()
     serializer_class = MembresiaSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
 
 class RegistroUsuarioView(generics.CreateAPIView):
     queryset = User.objects.all()
