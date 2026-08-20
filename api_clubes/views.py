@@ -1,5 +1,7 @@
 from rest_framework import (viewsets, generics)
 from rest_framework.permissions import AllowAny
+from django.db import IntegrityError
+from rest_framework.exceptions import ValidationError
 from django.contrib.auth.models import User
 from .models import Club, Membresia, ItemInventario, Asamblea, OpcionVoto, Voto
 from rest_framework.permissions import IsAuthenticated
@@ -63,4 +65,11 @@ class VotoViewSet(viewsets.ModelViewSet):
     queryset = Voto.objects.all()
     serializer_class = VotoSerializer
     permission_classes = [IsAuthenticated]
-    def perform_create(self, serializer): serializer.save(usuario=self.request.user)
+    
+    def perform_create(self, serializer):
+        try:
+            # Intenta guardar el voto con el usuario autenticado
+            serializer.save(usuario=self.request.user)
+        except IntegrityError:
+            # Si choca con la regla unique_together de la base de datos, lanza el error
+            raise ValidationError({"non_field_errors": ["El usuario ya emitió su voto en esta asamblea."]})
