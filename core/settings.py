@@ -155,4 +155,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication', 
         'rest_framework.authentication.SessionAuthentication', 
     ], 
+    # Por defecto, TODA la API exige autenticacion.
+    # Las rutas deliberadamente publicas (registro, login) declaran AllowAny
+    # de forma explicita en su propia vista.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 } 
